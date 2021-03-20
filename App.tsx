@@ -5,7 +5,15 @@ import { StyleSheet, Text, View } from 'react-native';
 interface TProps { }
 
 interface TState {
-  hasCameraPermission: boolean
+  hasCameraPermission: boolean,
+  cameraState: CameraState,
+  data?: string,
+  type?: string
+}
+
+enum CameraState{
+  Scanning,
+  Scanned
 }
 
 class App extends React.Component<TProps, TState> {
@@ -14,14 +22,17 @@ class App extends React.Component<TProps, TState> {
     super(props);
     this.state = {
       hasCameraPermission: false,
+      cameraState: CameraState.Scanning
     };
   }
 
   onBarcodeScanned = (result: BarCodeScannerResult) => {
-    alert(JSON.stringify({
+    this.setState({
+      ...this.state,
+      cameraState: CameraState.Scanned,
       data: result.data,
       type: result.type
-    }));
+    })
   }
 
   async componentDidMount() {
@@ -43,7 +54,7 @@ class App extends React.Component<TProps, TState> {
 
     return (
       <BarCodeScanner 
-        onBarCodeScanned={this.onBarcodeScanned}
+        onBarCodeScanned={this.state.cameraState === CameraState.Scanning ? this.onBarcodeScanned: undefined}
         style={StyleSheet.absoluteFillObject}
       />
     );
