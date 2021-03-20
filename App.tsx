@@ -1,14 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
+import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+class App extends React.Component {
+
+  onBarcodeScanned = (result: BarCodeScannerResult) => {
+    alert({
+      data: result.data,
+      type: result.type
+    })
+  }
+
+  render(){
+    return (
+      <BarCodeScanner style={styles.container}
+        onBarCodeScanned={this.onBarcodeScanned}
+      />
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -19,3 +28,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+export default App;
